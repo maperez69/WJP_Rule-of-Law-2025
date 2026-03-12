@@ -64,11 +64,31 @@
                 { name: "Venezuela", score: 0.26, fill: "#ef4444" },
             ],
             globalTrends: [
-                { name: "Límites al Poder", decline: 68 },
-                { name: "Gobierno Abierto", decline: 66 },
-                { name: "Derechos Fund.", decline: 66 },
-                { name: "Justicia Civil", decline: 68 },
-                { name: "Justicia Penal", decline: 60 }
+                { 
+                    name: "Límites al Poder", 
+                    decline: 68, 
+                    desc: "Mide si el poder legislativo y judicial pueden supervisar efectivamente al gobierno. Su declive indica un preocupante avance del autoritarismo ejecutivo." 
+                },
+                { 
+                    name: "Gobierno Abierto", 
+                    decline: 66, 
+                    desc: "Evalúa la transparencia de las leyes, el derecho a la información y la participación ciudadana. Menos apertura significa menos rendición de cuentas." 
+                },
+                { 
+                    name: "Derechos Fundamentales", 
+                    decline: 66, 
+                    desc: "Incluye libertad de expresión y asamblea. Es el factor con mayor retroceso global debido a la represión de voces críticas y activistas." 
+                },
+                { 
+                    name: "Justicia Civil", 
+                    decline: 68, 
+                    desc: "Mide si la justicia es accesible, rápida y libre de corrupción para ciudadanos comunes. Los retrasos y la influencia política están asfixiando este sistema." 
+                },
+                { 
+                    name: "Justicia Penal", 
+                    decline: 60, 
+                    desc: "Evalúa la efectividad de la investigación policial y el respeto al debido proceso. Su baja refleja sistemas ineficientes o utilizados políticamente." 
+                }
             ],
             top5: [
                 { r: 1, n: "Dinamarca", s: 0.90 },
@@ -103,7 +123,7 @@
                             <p className="text-slate-500 font-medium">Estado de Derecho: Reporte Interactivo</p>
                         </div>
                         <div className="bg-emerald-100 text-emerald-800 px-4 py-2 rounded-xl text-sm font-bold border border-emerald-200 self-start flex items-center gap-2">
-                            <Icons.MapPin /> México Profile
+                            <Icons.MapPin /> Perfil México
                         </div>
                     </header>
 
@@ -112,7 +132,7 @@
                             { id: 'mexico', l: '🇲🇽 México', i: Icons.MapPin },
                             { id: 'global', l: 'Tendencias', i: Icons.Globe },
                             { id: 'rankings', l: 'Rankings', i: Icons.Award },
-                            { id: 'factores', l: 'Factores', i: Icons.Layers }
+                            { id: 'factores', l: 'Desglose Factores', i: Icons.Layers }
                         ].map(t => (
                             <button key={t.id} onClick={() => setTab(t.id)} className={`px-5 py-2.5 rounded-xl font-bold text-sm flex items-center gap-2 whitespace-nowrap transition-all ${tab === t.id ? 'bg-blue-600 text-white shadow-lg shadow-blue-200' : 'bg-white text-slate-500 border border-slate-200'}`}>
                                 <t.i /> {t.l}
@@ -130,7 +150,7 @@
 
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                 <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
-                                    <h3 className="font-black text-slate-800 mb-6 uppercase text-xs tracking-widest">Radar: Desglose por Factor</h3>
+                                    <h3 className="font-black text-slate-800 mb-6 uppercase text-xs tracking-widest">Radar: Fortalezas y Debilidades</h3>
                                     <div className="h-[300px] md:h-[350px]">
                                         <ResponsiveContainer>
                                             <RadarChart cx="50%" cy="50%" outerRadius="80%" data={DATA.mexico.factors}>
@@ -142,10 +162,13 @@
                                             </RadarChart>
                                         </ResponsiveContainer>
                                     </div>
+                                    <p className="text-xs text-slate-400 mt-4 text-center leading-relaxed">
+                                        <b>Síntesis México:</b> El país muestra resiliencia en Gobierno Abierto, pero enfrenta una crisis institucional profunda en Justicia Penal y Anticorrupción.
+                                    </p>
                                 </div>
 
                                 <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
-                                    <h3 className="font-black text-slate-800 mb-6 uppercase text-xs tracking-widest">Benchmark: Pares Regionales</h3>
+                                    <h3 className="font-black text-slate-800 mb-6 uppercase text-xs tracking-widest">Benchmark Regional</h3>
                                     <div className="h-[300px] md:h-[350px]">
                                         <ResponsiveContainer>
                                             <BarChart data={DATA.benchmark} layout="vertical" margin={{ left: 10, right: 30 }}>
@@ -159,36 +182,41 @@
                                             </BarChart>
                                         </ResponsiveContainer>
                                     </div>
-                                    <p className="text-[10px] text-slate-400 mt-4 text-center">México está 20% por debajo del promedio de Brasil y Colombia.</p>
+                                    <div className="mt-4 p-4 bg-slate-50 rounded-xl">
+                                        <p className="text-[11px] text-slate-600 leading-relaxed font-medium">
+                                            <b>Contexto:</b> México se ubica por debajo del promedio regional y está perdiendo terreno frente a economías similares como Brasil y Colombia.
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     )}
 
                     {tab === 'global' && (
-                        <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm text-center space-y-6">
-                            <Icons.Globe />
-                            <h2 className="text-2xl font-black text-slate-900">Recesión Global del Estado de Derecho</h2>
-                            <p className="text-slate-500 max-w-xl mx-auto text-sm leading-relaxed">
-                                Por octavo año consecutivo, el Estado de Derecho declina en el 68% de los países. 
-                                Los pilares de la democracia están bajo presión por el auge del autoritarismo.
-                            </p>
-                            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
-                                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100">
-                                    <p className="text-2xl font-black text-rose-600">68%</p>
-                                    <p className="text-[10px] font-bold text-slate-400 uppercase">Declive Global</p>
-                                </div>
-                                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100">
-                                    <p className="text-2xl font-black text-amber-600">70%</p>
-                                    <p className="text-[10px] font-bold text-slate-400 uppercase">Cierre Cívico</p>
-                                </div>
-                                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100">
-                                    <p className="text-2xl font-black text-blue-600">61%</p>
-                                    <p className="text-[10px] font-bold text-slate-400 uppercase">Control Judicial ↓</p>
-                                </div>
-                                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100">
-                                    <p className="text-2xl font-black text-slate-800">0.55</p>
-                                    <p className="text-[10px] font-bold text-slate-400 uppercase">Promedio Mundial</p>
+                        <div className="space-y-6">
+                            <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm text-center space-y-6">
+                                <Icons.Globe />
+                                <h2 className="text-2xl font-black text-slate-900">Síntesis de la Recesión Global</h2>
+                                <p className="text-slate-500 max-w-2xl mx-auto text-sm leading-relaxed">
+                                    El declive del Estado de Derecho no es solo una cifra, es una <b>crisis de gobernanza</b>. En 2025, el motor principal es el aumento del autoritarismo que erosiona la independencia de jueces y legisladores, cerrando espacios de participación cívica.
+                                </p>
+                                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
+                                    <div className="p-4 rounded-2xl bg-rose-50 border border-rose-100">
+                                        <p className="text-2xl font-black text-rose-600">68%</p>
+                                        <p className="text-[9px] font-bold text-rose-400 uppercase">Países que caen</p>
+                                    </div>
+                                    <div className="p-4 rounded-2xl bg-amber-50 border border-amber-100">
+                                        <p className="text-2xl font-black text-amber-600">70%</p>
+                                        <p className="text-[9px] font-bold text-amber-400 uppercase">Erosión Cívica</p>
+                                    </div>
+                                    <div className="p-4 rounded-2xl bg-blue-50 border border-blue-100">
+                                        <p className="text-2xl font-black text-blue-600">61%</p>
+                                        <p className="text-[9px] font-bold text-blue-400 uppercase">Ataque Judicial</p>
+                                    </div>
+                                    <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100">
+                                        <p className="text-2xl font-black text-slate-800">0.55</p>
+                                        <p className="text-[9px] font-bold text-slate-400 uppercase">Media Global</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -197,7 +225,7 @@
                     {tab === 'rankings' && (
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
-                                <h3 className="font-black text-slate-800 mb-6 uppercase text-xs tracking-widest text-emerald-600">Top 5 Mundial</h3>
+                                <h3 className="font-black text-slate-800 mb-6 uppercase text-xs tracking-widest text-emerald-600">Top 5 Mundial (Líderes)</h3>
                                 {DATA.top5.map(i => (
                                     <div key={i.r} className="flex justify-between items-center py-3 border-b border-slate-50 last:border-0">
                                         <span className="text-sm font-bold text-slate-600">#{i.r} {i.n}</span>
@@ -206,14 +234,14 @@
                                 ))}
                             </div>
                             <div className="bg-slate-900 p-6 rounded-2xl text-white shadow-xl">
-                                <h3 className="font-black mb-6 uppercase text-xs tracking-widest text-blue-400">Posición México</h3>
+                                <h3 className="font-black mb-6 uppercase text-xs tracking-widest text-blue-400">Análisis: México en el Ranking</h3>
                                 <div className="space-y-4">
                                     <div className="flex justify-between items-center p-4 bg-slate-800 rounded-xl border border-slate-700">
                                         <span className="font-bold">#121 México</span>
                                         <span className="text-xl font-black">0.40</span>
                                     </div>
                                     <p className="text-xs text-slate-400 leading-relaxed">
-                                        México se sitúa en el nivel de países como Nigeria y Turquía. En Latinoamérica ocupa el lugar 27 de 32, solo superando a naciones con crisis institucionales severas.
+                                        México comparte posición con países como Nigeria y Turquía. En Latinoamérica, el país ocupa el lugar 27 de 32, solo superando a naciones con crisis institucionales extremas como Venezuela o Haití.
                                     </p>
                                 </div>
                             </div>
@@ -221,15 +249,19 @@
                     )}
 
                     {tab === 'factores' && (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {DATA.globalTrends.map((f, i) => (
-                                <div key={i} className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between">
-                                    <h4 className="font-bold text-slate-700 text-sm mb-4">{f.name}</h4>
-                                    <div className="flex items-end justify-between">
-                                        <span className="text-3xl font-black text-rose-500">{f.decline}%</span>
-                                        <span className="text-[10px] font-bold text-slate-300 uppercase">En declive</span>
+                                <div key={i} className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex flex-col justify-between hover:border-blue-200 transition-colors">
+                                    <div>
+                                        <h4 className="font-black text-slate-800 text-sm mb-3 flex justify-between items-center">
+                                            {f.name}
+                                            <span className="text-rose-500 font-black">{f.decline}% ↓</span>
+                                        </h4>
+                                        <p className="text-[11px] text-slate-500 leading-relaxed mb-4">
+                                            {f.desc}
+                                        </p>
                                     </div>
-                                    <div className="w-full bg-slate-100 h-1.5 rounded-full mt-4">
+                                    <div className="w-full bg-slate-100 h-1.5 rounded-full">
                                         <div className="bg-rose-500 h-1.5 rounded-full" style={{ width: `${f.decline}%` }}></div>
                                     </div>
                                 </div>
@@ -239,7 +271,7 @@
 
                     <footer className="mt-16 pt-8 border-t border-slate-200 text-center space-y-2">
                         <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">© 2025 World Justice Project | Data Intelligence</p>
-                        <p className="text-[10px] text-slate-300">Optimizado para dispositivos móviles y escritorio</p>
+                        <p className="text-[10px] text-slate-300">Resumen conceptual de factores y tendencias globales</p>
                     </footer>
                 </div>
             );
