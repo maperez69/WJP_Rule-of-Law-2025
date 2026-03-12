@@ -1,0 +1,244 @@
+import React, { useState } from 'react';
+import { 
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
+  Cell, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar
+} from 'recharts';
+import { 
+  AlertTriangle, Globe, TrendingDown, TrendingUp, Search, 
+  ShieldCheck, Landmark, Users, Scale, Lock, Eye, Gavel, Briefcase,
+  MapPin, Award
+} from 'lucide-react';
+
+const WJP_DATA = {
+  mexicoProfile: {
+    score: 0.40,
+    globalRank: 121,
+    regionalRank: 27, // de 32 en LAC
+    change: -2.8,
+    factors: [
+      { subject: 'Límites al Poder', score: 0.41 },
+      { subject: 'Ausencia Corrupción', score: 0.26 },
+      { subject: 'Gobierno Abierto', score: 0.54 },
+      { subject: 'Derechos Fund.', score: 0.45 },
+      { subject: 'Orden y Seguridad', score: 0.50 },
+      { subject: 'Cumplimiento Reg.', score: 0.42 },
+      { subject: 'Justicia Civil', score: 0.36 },
+      { subject: 'Justicia Penal', score: 0.27 },
+    ]
+  },
+  comparisonData: [
+    { name: "Dinamarca (Líder)", score: 0.90, fill: "#1e3a8a" },
+    { name: "Uruguay (Líder LAC)", score: 0.72, fill: "#3b82f6" },
+    { name: "Promedio Global", score: 0.55, fill: "#94a3b8" },
+    { name: "México", score: 0.40, fill: "#047857" },
+    { name: "Venezuela (Último)", score: 0.26, fill: "#ef4444" },
+  ],
+  topRankings: [
+    { rank: 1, country: "Dinamarca", score: 0.90 },
+    { rank: 2, country: "Noruega", score: 0.89 },
+    { rank: 3, country: "Finlandia", score: 0.87 },
+    { rank: 4, country: "Suecia", score: 0.85 },
+    { rank: 5, country: "N. Zelanda", score: 0.83 },
+  ],
+  factors: [
+    { factor: "Límites al Poder", pctDecline: 68, icon: Landmark },
+    { factor: "Ausencia Corrupción", pctDecline: 45, icon: ShieldCheck },
+    { factor: "Gobierno Abierto", pctDecline: 66, icon: Eye },
+    { factor: "Derechos Fund.", pctDecline: 66, icon: Users },
+    { factor: "Orden y Seguridad", pctDecline: 40, icon: Lock },
+    { factor: "Cumplimiento Reg.", pctDecline: 55, icon: Briefcase },
+    { factor: "Justicia Civil", pctDecline: 68, icon: Scale },
+    { factor: "Justicia Penal", pctDecline: 60, icon: Gavel },
+  ]
+};
+
+const App = () => {
+  const [activeTab, setActiveTab] = useState('mexico');
+
+  const StatCard = ({ title, value, subtext, icon: Icon, color }) => (
+    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-start space-x-4">
+      <div className={`p-3 rounded-lg ${color}`}>
+        <Icon className="w-6 h-6 text-white" />
+      </div>
+      <div>
+        <p className="text-sm font-medium text-gray-500 uppercase tracking-wider">{title}</p>
+        <h3 className="text-2xl font-bold text-gray-900">{value}</h3>
+        <p className="text-xs text-gray-400 mt-1">{subtext}</p>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="min-h-screen bg-gray-50 p-4 md:p-8 font-sans text-gray-900">
+      <header className="max-w-7xl mx-auto mb-8">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-extrabold text-blue-900 flex items-center gap-3">
+              <Landmark className="w-8 h-8" />
+              WJP Rule of Law Index 2025
+            </h1>
+            <p className="text-gray-600 mt-1">Análisis Comparativo del Estado de Derecho</p>
+          </div>
+          <div className="flex gap-2">
+            <div className="bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-semibold border border-green-200 flex items-center gap-2">
+              <MapPin className="w-4 h-4" /> México: 0.40
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <nav className="max-w-7xl mx-auto mb-6 flex space-x-2 overflow-x-auto pb-2">
+        {[
+          { id: 'mexico', label: '🇲🇽 México', icon: MapPin },
+          { id: 'resumen', label: 'Resumen Global', icon: Globe },
+          { id: 'rankings', label: 'Rankings', icon: Award },
+          { id: 'factores', label: 'Factores Globales', icon: Scale }
+        ].map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={`px-6 py-2 rounded-lg font-medium transition-all flex items-center gap-2 whitespace-nowrap ${
+              activeTab === tab.id 
+                ? 'bg-blue-600 text-white shadow-md' 
+                : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
+            }`}
+          >
+            <tab.icon className="w-4 h-4" />
+            {tab.label}
+          </button>
+        ))}
+      </nav>
+
+      <main className="max-w-7xl mx-auto">
+        {activeTab === 'mexico' && (
+          <div className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <StatCard title="Puntaje México" value="0.40" subtext="Escala 0 a 1" icon={MapPin} color="bg-green-700" />
+              <StatCard title="Posición Global" value="#121" subtext="De 143 países" icon={TrendingDown} color="bg-red-600" />
+              <StatCard title="Cambio Anual" value="-2.8%" subtext="Declive significativo" icon={AlertTriangle} color="bg-orange-600" />
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <h3 className="text-lg font-bold mb-6">Comparativa: México vs. Referentes</h3>
+                <div className="h-72">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={WJP_DATA.comparisonData}>
+                      <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                      <XAxis dataKey="name" fontSize={11} interval={0} />
+                      <YAxis domain={[0, 1]} />
+                      <Tooltip />
+                      <Bar dataKey="score">
+                        {WJP_DATA.comparisonData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.fill} />
+                        ))}
+                      </Bar>
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+                <p className="mt-4 text-sm text-gray-600 p-4 bg-gray-50 rounded-lg">
+                  México se encuentra un <strong>27% por debajo del promedio global</strong> (0.55) y muestra una brecha considerable respecto a Uruguay, líder de la región.
+                </p>
+              </div>
+
+              <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <h3 className="text-lg font-bold mb-4">Fortalezas y Debilidades</h3>
+                <div className="space-y-4">
+                  <div className="p-4 bg-red-50 border border-red-100 rounded-lg">
+                    <p className="text-xs text-red-600 font-bold uppercase">Puesto en Latinoamérica</p>
+                    <p className="text-2xl font-bold text-red-900">27 / 32</p>
+                  </div>
+                  <div className="grid grid-cols-1 gap-3">
+                    <div className="p-3 border rounded-lg bg-green-50 border-green-100">
+                      <span className="text-sm font-bold text-green-800">Mejor Factor: Gobierno Abierto (0.54)</span>
+                    </div>
+                    <div className="p-3 border rounded-lg bg-red-50 border-red-100">
+                      <span className="text-sm font-bold text-red-800">Peor Factor: Ausencia de Corrupción (0.26)</span>
+                    </div>
+                    <div className="p-3 border rounded-lg bg-red-50 border-red-100">
+                      <span className="text-sm font-bold text-red-800">Factor Crítico: Justicia Penal (0.27)</span>
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-400 italic">
+                    * Datos basados en el reporte WJP 2025.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'resumen' && (
+          <div className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <StatCard title="Declive Global" value="68%" subtext="Países que empeoraron" icon={TrendingDown} color="bg-red-500" />
+              <StatCard title="Puntaje Máximo" value="0.90" subtext="Dinamarca" icon={Globe} color="bg-blue-500" />
+              <StatCard title="Espacio Cívico" value="70% ↓" subtext="Bajo asedio" icon={Users} color="bg-orange-500" />
+              <StatCard title="Indep. Judicial" value="61% ↓" subtext="En retroceso" icon={Gavel} color="bg-purple-500" />
+            </div>
+            <div className="bg-white p-6 rounded-xl border border-gray-100">
+              <h3 className="font-bold text-lg mb-4">Hallazgos Principales 2025</h3>
+              <p className="text-gray-600 leading-relaxed">
+                La recesión del Estado de Derecho se está acelerando. El reporte destaca que el 68% de los países declinaron este año, frente al 57% del año pasado. 
+                El auge del autoritarismo, el debilitamiento de los sistemas de pesos y contrapesos, y la reducción de las libertades cívicas son los motores de este declive.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'rankings' && (
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+            <div className="grid grid-cols-1 md:grid-cols-2 divide-x">
+              <div className="p-6">
+                <h4 className="text-green-700 font-bold mb-4 uppercase text-xs">Top 5 Mundial</h4>
+                <div className="space-y-3">
+                  {WJP_DATA.topRankings.map(c => (
+                    <div key={c.rank} className="flex justify-between items-center p-2 hover:bg-gray-50 rounded">
+                      <span>#{c.rank} {c.country}</span>
+                      <span className="font-bold text-blue-900">{c.score.toFixed(2)}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="p-6">
+                <h4 className="text-gray-500 font-bold mb-4 uppercase text-xs">Contexto México</h4>
+                <div className="p-4 bg-blue-50 rounded-lg border border-blue-100 mb-4">
+                  <div className="flex justify-between items-center font-bold">
+                    <span>#121 México</span>
+                    <span className="text-lg">0.40</span>
+                  </div>
+                </div>
+                <p className="text-sm text-gray-500">
+                  México comparte niveles similares de adhesión al Estado de Derecho con países como Nigeria y Turquía. Se sitúa por debajo de la mayoría de sus pares económicos en el G20 y la OCDE.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'factores' && (
+          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+            <h3 className="text-lg font-bold mb-6">Declive Global por Dimensión</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {WJP_DATA.factors.map((f, i) => (
+                <div key={i} className="p-4 border rounded-xl hover:bg-gray-50 transition-colors">
+                  <div className="flex items-center justify-between mb-2">
+                    <f.icon className="w-5 h-5 text-blue-600" />
+                    <span className="text-red-600 font-bold">{f.pctDecline}% ↓</span>
+                  </div>
+                  <h4 className="font-bold text-sm text-gray-700">{f.factor}</h4>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </main>
+
+      <footer className="max-w-7xl mx-auto mt-12 py-8 border-t border-gray-200 text-center text-gray-400 text-xs">
+        © 2025 WORLD JUSTICE PROJECT | REPORTE ANUAL DE ESTADO DE DERECHO
+      </footer>
+    </div>
+  );
+};
+
+export default App;
